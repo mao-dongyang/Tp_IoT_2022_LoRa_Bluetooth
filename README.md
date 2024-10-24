@@ -1,6 +1,6 @@
 # Tp_IoT_2022_LoRa_Bluetooth
 
-Ce TP est à réaliser à deux groupes.
+Teammates: MAO Dongyang, XIAO Shengyao, ZHANG Jie
 
 ## 1. Mise en place
 
