@@ -1,10 +1,11 @@
 #include <LoRa.h>
 #include <WiFi.h>
+#include <SPI.h>
 #include <PubSubClient.h>
 
 // WiFi credentials
-const char* ssid = "Your_WiFi_SSID";
-const char* password = "Your_WiFi_Password";
+const char* ssid = "Dongyang";          // WiFi name
+const char* password = "mdy123456";      // WiFi password
 
 // MQTT broker
 const char* mqtt_server = "test.mosquitto.org";
@@ -12,12 +13,12 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 // LoRa parameters
-#define LORA_SCK 5
-#define LORA_MISO 19
-#define LORA_MOSI 27
-#define LORA_SS 18
-#define LORA_RST 14
-#define LORA_DIO0 26
+#define SCK 5 // GPIO5 SX127x's SCK
+#define MISO 19 // GPIO19 SX127x's MISO
+#define MOSI 27 // GPIO27 SX127x's MOSI
+#define SS 18 // GPI018 SX127x's CS
+#define RST 14 // GPI014 SX127x's RESET
+#define DI0 26 // GPIO26 SX127x's IRQ(Interrupt Request)
 
 void setupWiFi() {
   WiFi.begin(ssid, password);
@@ -41,8 +42,10 @@ void setupMQTT() {
 }
 
 void setupLoRa() {
-  LoRa.setPins(LORA_SS, LORA_RST, LORA_DIO0);
-  if (!LoRa.begin(868E6)) {
+  pinMode(DI0,INPUT);
+  SPI.begin(SCK,MISO,MOSI,SS);
+  LoRa.setPins(SS, RST, DI0);
+  if (!LoRa.begin(869E6)) {
     Serial.println("Starting LoRa failed!");
     while (1);
   }
@@ -50,8 +53,8 @@ void setupLoRa() {
 }
 
 void sendMQTTParameters() {
-  const char* topic = "lora/parameters";
-  const char* message = "{\"sb\":125,\"sf\":7,\"freq\":868}";
+  const char* topic = "tp_popo/NIG";
+  const char* message = "{\"sb\":125,\"sf\":8,\"freq\":869}";
   client.publish(topic, message);
   Serial.println("MQTT message sent: " + String(message));
 }
