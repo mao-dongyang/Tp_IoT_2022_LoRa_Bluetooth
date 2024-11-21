@@ -4,8 +4,8 @@
 #include <ArduinoJson.h>
 
 // WiFi credentials
-const char* ssid = "Your_WiFi_SSID";
-const char* password = "Your_WiFi_Password";
+const char* ssid = "Dongyang";          // WiFi name
+const char* password = "mdy123456";      // WiFi password
 
 // MQTT broker
 const char* mqtt_server = "test.mosquitto.org";
@@ -34,9 +34,9 @@ void setupMQTT() {
   client.setCallback(callback);
   while (!client.connected()) {
     Serial.println("Connecting to MQTT...");
-    if (client.connect("LoRaReceiver")) {
+    if (client.connect("NIG")) {
       Serial.println("Connected to MQTT");
-      client.subscribe("lora/parameters");
+      client.subscribe("tp_popo/NIG");
     } else {
       delay(1000);
     }
